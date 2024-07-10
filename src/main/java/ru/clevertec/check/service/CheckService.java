@@ -13,6 +13,8 @@ import main.java.ru.clevertec.check.service.persistence.csv.CSVCheckOutputServic
 import main.java.ru.clevertec.check.service.persistence.csv.CSVDiscountCardService;
 import main.java.ru.clevertec.check.service.persistence.csv.CSVProductService;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,12 +27,12 @@ public class CheckService {
     private OrderParser parser;
     private final String PRODUCT_FILE_PATH = "./src/main/resources/products.csv";
     private final String DISCOUNT_CARD_FILE_PATH = "./src/main/resources/discountCards.csv";
-    private final String RESULT_FILE_PATH = "result.csv";
+    private final String DEFAULT_RESULT_FILE_PATH = "result.csv";
     private DiscountCardService discountCardService;
     private ProductService productService;
     private DiscountSystemService discountSystemService;
     private CheckOutputService checkOutputService1 =
-            new CSVCheckOutputService(RESULT_FILE_PATH);
+            new CSVCheckOutputService(DEFAULT_RESULT_FILE_PATH);
     private CheckOutputService checkOutputService2 = new ConsoleCheckOutputService();
 
     public void makeCheck(String[] args) {
@@ -38,12 +40,18 @@ public class CheckService {
             boolean isDone;
             parser = new StringArgsOrderParser();
             Order order = parser.parseOrder(args);
+            if (order.pathToSaveFile().isEmpty()) {
+                throw new BadRequestException("saveToFile argument doesn't " +
+                        "exist");
+            }
+            checkOutputService1 =
+                    new CSVCheckOutputService(order.pathToSaveFile().get());
             validateOrder(order);
             discountCardService
                     = new CSVDiscountCardService(DISCOUNT_CARD_FILE_PATH);
-            productService = new CSVProductService(PRODUCT_FILE_PATH);
+            productService =
+                    new CSVProductService(order.pathToProductList().get());
             discountSystemService = new DiscountSystemService();
-            checkOutputService1 = new CSVCheckOutputService(RESULT_FILE_PATH);
             checkOutputService2 = new ConsoleCheckOutputService();
             Check check = new Check();
 
@@ -74,6 +82,13 @@ public class CheckService {
     }
 
     private void validateOrder(Order order) throws BadRequestException {
+        if (order.pathToProductList().isEmpty()) {
+            throw new BadRequestException("pathToFile argument doesn't " +
+                    "exist");
+        }
+        if (Files.notExists(Paths.get(order.pathToProductList().get()))) {
+            throw new BadRequestException("pathToFile argument is invalid");
+        }
         if (order.balanceDebitCard() == null)
             throw new BadRequestException("balanceDebitCard parameter is " +
                     "invalid");

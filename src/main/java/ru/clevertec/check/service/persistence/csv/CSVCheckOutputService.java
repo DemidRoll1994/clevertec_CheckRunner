@@ -21,7 +21,7 @@ public class CSVCheckOutputService implements CheckOutputService {
 
     @Override
     public void printErrorMessage(String message) {
-        csvio.writeFile("result.csv",
+        csvio.writeFile(pathToPrint,
                 String.format("ERROR\n%s", message));
     }
 

@@ -10,14 +10,16 @@ import java.util.Optional;
 public record Order(Map<Long, Integer> productQuantites,
                     Optional<Long> discountCardNumber ,
                     Double balanceDebitCard,
-                    Optional<String> PathToSaveFile) {
+                    Optional<String> pathToSaveFile,
+                    Optional<String> pathToProductList) {
 
     public static final class Builder {
 
         Map<Long, Integer> products = new HashMap<>();
         Optional<Long> discountCardNumber = Optional.empty();
         Double balanceDebitCard = null;
-        Optional<String> PathToSaveFile = Optional.empty();
+        Optional<String> pathToSaveFile = Optional.empty();
+        Optional<String> pathToProductList = Optional.empty();
 
         public Builder() {
         }
@@ -37,14 +39,18 @@ public record Order(Map<Long, Integer> productQuantites,
             return this;
         }
 
-        public Builder PathToSaveFile(Optional<String> PathToSaveFile) {
-            this.PathToSaveFile = PathToSaveFile;
+        public Builder pathToSaveFile(Optional<String> pathToSaveFile) {
+            this.pathToSaveFile = pathToSaveFile;
+            return this;
+        }
+        public Builder pathToProductList(Optional<String> pathToProductList) {
+            this.pathToProductList = pathToProductList;
             return this;
         }
 
         public Order build() {
             return new Order(products, discountCardNumber,
-                    balanceDebitCard, PathToSaveFile);
+                    balanceDebitCard, pathToSaveFile, pathToProductList);
         }
     }
 }

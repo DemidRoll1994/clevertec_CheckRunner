@@ -30,6 +30,10 @@ public class StringArgsOrderParser implements OrderParser {
                                         Long.parseLong(splitTempResult[1])));
                         case "balanceDebitCard" -> order.balanceDebitCard(
                                 Double.parseDouble(splitTempResult[1]));
+                        case "pathToFile" -> order.pathToProductList(
+                                Optional.ofNullable(splitTempResult[1]));
+                        case "saveToFile" -> order.pathToSaveFile(
+                                Optional.ofNullable(splitTempResult[1]));
                         default -> throw new BadRequestException("");
                     }
                 } catch (Exception e) {
