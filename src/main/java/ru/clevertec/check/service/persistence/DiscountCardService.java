@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface DiscountCardService {
 
-    public Map<Long, DiscountCard> getAll();
-    public DiscountCard findByCardNumber(Long cardNumber);
+    Map<Long, DiscountCard> getAll();
+    DiscountCard findByCardNumber(Long cardNumber);
 }

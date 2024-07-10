@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ProductService {
 
-    public Map<Long, Product> getAll();
+    Map<Long, Product> getAll();
 
-    public Product findById(Long id);
+    Product findById(Long id);
 }

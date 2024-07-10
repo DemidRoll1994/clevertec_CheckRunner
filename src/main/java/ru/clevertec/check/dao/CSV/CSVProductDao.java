@@ -2,7 +2,6 @@ package main.java.ru.clevertec.check.dao.CSV;
 
 import main.java.ru.clevertec.check.dao.ProductDao;
 import main.java.ru.clevertec.check.io.CSVIO;
-import main.java.ru.clevertec.check.model.DiscountCard;
 import main.java.ru.clevertec.check.model.Product;
 import main.java.ru.clevertec.check.parser.CSVFileParser;
 
